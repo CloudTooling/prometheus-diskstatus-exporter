@@ -94,5 +94,5 @@ jobs:
           image: ${{ steps.build-image.outputs.image }}
           tags: 'latest ${{ github.event.inputs.releaseversion }}'
           registry: registry.hub.docker.com
-          username: continuoussecuritytooling
+          username: ${{ vars.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
