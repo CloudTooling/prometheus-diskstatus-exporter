@@ -2,5 +2,15 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+# Windows
+Thumbs.db
+desktop.ini
+
+# OS X
+.DS_Store
+.Spotlight-V100
+.Trashes
+._*
+
 __pycache__/
 venv/
