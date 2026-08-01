@@ -6,6 +6,9 @@ SPDX-License-Identifier: GPL-3.0-only
 
 <p align="center"><img src="docs/logo.gif" alt="logo" width="75%" /></p>
 
+![Docker Pulls](https://img.shields.io/docker/pulls/cloudtooling/prometheus-diskstatus-exporter)
+
+
 # prometheus-diskspin-exporter
 
 *Note: this project was renamed from prometheus-hdparm-exporter to avoid a
@@ -32,13 +35,23 @@ filesystem.
 
 ## Usage
 
-```text
-prometheus-diskspin-exporter HOST PORT
+```yaml
+services:
+  diskstatus-exporter:
+    image: cloudtooling/prometheus-diskstatus-exporter:0.2.3
+    privileged: true          # needs hdparm -C access to /dev/sd*
+    ports:
+        - <...>:9284
+    restart: unless-stopped
+    devices:
+      - /dev/sda
+      - /dev/sdb
+      # add your disks
 ```
 
 ## Example
 
-```
+```bash
 $ sudo prometheus-diskspin-exporter localhost 28101 &
 $ curl localhost:28101/metrics
 hdparm_disk_power_status{disk="/dev/sda",status="standby"} 1 1731616722000
@@ -62,7 +75,7 @@ Status values:
 The code fits a single file `main.py` and can easily be distributed on hosts
 manually:
 
-```
+```bash
 curl https://raw.githubusercontent.com/gagath/prometheus-diskspin-exporter/refs/heads/main/src/prometheus_diskspin_exporter/main.py \
     -o /opt/prometheus_diskspin_exporter.py
 chmod +x /opt/prometheus_diskspin_exporter.py
@@ -70,14 +83,14 @@ chmod +x /opt/prometheus_diskspin_exporter.py
 
 If you want to install the systemd service:
 
-```
+```bash
 curl https://raw.githubusercontent.com/gagath/prometheus-diskspin-exporter/refs/heads/main/systemd/prometheus-diskspin-exporter.service \
     -o /etc/systemd/system/prometheus-diskspin-exporter.service
 ```
 
 If you want to install the AppArmor configuration:
 
-```
+```bash
 curl https://raw.githubusercontent.com/gagath/prometheus-diskspin-exporter/refs/heads/main/apparmor.d/opt.prometheus_diskspin_exporter \
     -o /etc/apparmor.d/opt.prometheus_diskspin_exporter
 ```
